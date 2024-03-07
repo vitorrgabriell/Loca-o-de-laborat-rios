@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Título da página -->
+    <title>Cadastrar Coordenador</title>
+    <!-- Inclusão do CSS do Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Estilos personalizados -->
+    <style>
+        /* Estilos personalizados */
+        .container {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Cabeçalho da página -->
+    <header>
+        <div class="container">
+            <div class="text-center">
+                <!-- Logo -->
+                <img src="{{ url_for('static', filename='img/icon.png') }}" alt="logo" height="80"> 
+                <!-- Título -->
+                <h1 class="mt-3">Locação de Laboratórios</h1>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <!-- Título do formulário -->
+        <h2 class="mb-4">Cadastrar Coordenador</h2>
+        <!-- Formulário de cadastro de coordenador -->
+        <form action="{{ url_for('cadastrar_coordenador') }}" method="post">
+            <!-- Campo para o nome do coordenador -->
+            <div class="mb-3">
+                <label for="nome_coordenador" class="form-label">Nome do Coordenador:</label>
+                <input type="text" class="form-control" id="nome_coordenador" name="nome_coordenador" required>
+                <label for="email_coordenador" class="form-label">Email do Coordenador:</label>
+                <input type="email" class="form-control" id="email_coordenador" name="email_coordenador" required>
+                <label for="senha_coordenador" class="form-label">Senha do Coordenador:</label>
+                <input type="password" class="form-control" id="senha_coordenador" name="senha_coordenador" required>
+            </div>
+            <!-- Botão de envio do formulário -->
+            <button type="submit" class="btn btn-primary">Cadastrar</button>
+            <!-- Link para o menu principal -->
+            <a href="/dashboard_diretor" class="btn btn-secondary">Menu Principal</a>
+        </form>
+        {% if coordenador_existente %}
+        <div class = 'alert alert-danger mt-4' role="alert">
+            Este coordenador já está cadastrado.
+        </div>
+        {% endif %}
+    </div>
+    <!-- Inclusão do JavaScript do Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Script para exibir alerta de sucesso após o cadastro -->
+    <script>
+        // Verifica se o parâmetro 'success' está presente na URL e é igual a 'true'
+        const urlParams = new URLSearchParams(window.location.search);
+        const successParam = urlParams.get('success');
+
+        // Se 'success' for igual a 'true', exibe um alerta de sucesso
+        if (successParam === 'true') {
+            alert('Coordenador cadastrado com sucesso!');
+        }
+    </script>
+</body>
+</html>
