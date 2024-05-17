@@ -44,86 +44,20 @@
                 <img src="{{ url_for('static', filename='img/icon.png') }}" alt="logo" height="80"> 
                 <!-- Título -->
                 <h1 class="mt-3">Locação de Laboratórios</h1>
+                <form action="{{ url_for('logout') }}" method="get" class="botoes-header">
+                    <button type="submit" class="btn btn-danger mt-3 me-2">Logout</button>
+                </form>
             </div>
         </div>
     </header>
     <!-- Conteúdo principal da página -->
     <div class="container">
-        <div class="btn-group-vertical h-100" role="group">
-            <!-- Botão para cadastrar laboratório -->
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cadastroLaboratorioModal">
-                aaaa
-            </button>
-            <!-- Botão para cadastrar coordenador -->
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cadastroCoordenadorModal">
-                bbbbb
-            </button>
-            <!-- Botão para cadastrar responsável -->
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cadastroResponsavelModal">
-                ccccc
-            </button>
+        <div class="d-grid gap-2 col-6 mx-auto">
+            <!-- Botão para cadastrar disciplinas -->
+            <a href="{{ url_for('cadastrar_disciplina_form') }}" class="btn btn-primary">Cadastrar disciplina</a>
+            <a href="{{ url_for('cadastrar_requisitos_form') }}" class="btn btn-primary">Cadastrar requisitos da disciplina</a>
         </div>
     </div>
-
-    <!-- Modal para cadastrar laboratório -->
-    <div class="modal fade" id="cadastroLaboratorioModal" tabindex="-1" aria-labelledby="cadastroLaboratorioModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="cadastroLaboratorioModalLabel">Cadastrar Laboratório</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                        Confirme sua ação, você será direcionado para a página específica.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <a href="{{ url_for('cadastrar_laboratorio_form') }}" class="btn btn-primary">Confirmar</a>
-                </div>
-                </div>
-            </div>
-        </div>
-    </div>
-        
-    <!-- Modal para cadastrar coordenador -->
-    <div class="modal fade" id="cadastroCoordenadorModal" tabindex="-1" aria-labelledby="cadastroCoordenadorModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="cadastroCoordenadorModalLabel">Cadastrar Coordenador</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Confirme sua ação, você será direcionado para a página específica.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <a href="{{ url_for('cadastrar_coordenador_form') }}" class="btn btn-primary">Confirmar</a>
-                </div>
-            </div>
-        </div>
-    </div>
-        
-    <!-- Modal para cadastrar responsável -->
-    <div class="modal fade" id="cadastroResponsavelModal" tabindex="-1" aria-labelledby="cadastroResponsavelModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="cadastroResponsavelModalLabel">Cadastrar Responsavel</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Confirme sua ação, você será direcionado para a página específica.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <a href="{{ url_for('cadastrar_responsavel_form') }}" class="btn btn-primary">Confirmar</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
     <!-- Rodapé da página -->
     <footer>
         <p>&copy; 2024 Locação de laboratórios</p>

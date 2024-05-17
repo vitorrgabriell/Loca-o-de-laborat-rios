@@ -2,7 +2,7 @@
 <html>
 <head>
     <!-- Título da página -->
-    <title>Coordenadores</title>
+    <title>Professores</title>
     <!-- Inclusão do CSS do Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Estilos personalizados -->
@@ -35,59 +35,62 @@
         </div>
     </header>
     <div class="container">
-         <!-- Tabela de Laboratórios -->
-    <div class="container mt-5">
-        <h2>Coordenadores Cadastrados</h2>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">Nome</th>
-                    <th scope="col">Email</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for coordenador in coordenadores %}
-                <tr>
-                    <td>{{ coordenador.nome }}</td>
-                    <td>{{ coordenador.email }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-        <p>
-            <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-              Cadastrar Coordenador
-            </a>
-            <a href="/dashboard_diretor" class="btn btn-secondary">Menu Principal</a>
-          </p>
-          <div class="collapse" id="collapseExample">
-            <div class="card card-body">
-              <!-- Formulário de cadastro de coordenador -->
-        <form action="{{ url_for('cadastrar_coordenador') }}" method="post">
-            <!-- Campo para o nome do coordenador -->
+    <!-- Tabela de Professores -->
+<div class="container mt-5">
+    <h2>Professores Cadastrados</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Nome</th>
+                <th scope="col">Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for professor in professores %}
+            <tr>
+                <td>{{ professor.nome }}</td>
+                <td>{{ professor.email }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+    <p>
+        <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+          Cadastrar responsavel
+        </a>
+        <a href="/dashboard_diretor" class="btn btn-secondary">Menu Principal</a>
+      </p>
+      <div class="collapse" id="collapseExample">
+        <div class="card card-body">
+          <!-- Título do formulário -->
+        <h2 class="mb-4">Cadastrar Professor</h2>
+        <!-- Formulário de cadastro de Professor -->
+        <form action="{{ url_for('cadastrar_professor') }}" method="post">
+            <!-- Campo para o nome do Professor -->
             <div class="mb-3">
-                <label for="nome_coordenador" class="form-label">Nome do Coordenador:</label>
-                <input type="text" class="form-control" id="nome_coordenador" name="nome_coordenador" required>
-                <label for="email_coordenador" class="form-label">Email do Coordenador:</label>
-                <input type="email" class="form-control" id="email_coordenador" name="email_coordenador" required>
-                <label for="senha_coordenador" class="form-label">Senha do Coordenador:</label>
-                <input type="password" class="form-control" id="senha_coordenador" name="senha_coordenador" required>
+                <label for="nome_professor" class="form-label">Nome do Professor:</label>
+                <input type="text" class="form-control" id="nome_professor" name="nome_professor" required>
+                <label for="email_professor" class="form-label">Email do Professor:</label>
+                <input type="email" class="form-control" id="email_professor" name="email_professor" required>
+                <label for="senha_professor" class="form-label">Senha do Professor:</label>
+                <input type="password" class="form-control" id="senha_professor" name="senha_professor" required>
             </div>
             <!-- Botão de envio do formulário -->
             <button type="submit" class="btn btn-primary">Cadastrar</button>
+            <!-- Link para o menu principal -->
+            <a href="/dashboard_diretor" class="btn btn-secondary">Menu Principal</a>
         </form>
-         </div>
         </div>
-        {% if coordenador_existente %}
-        <div class = 'alert alert-danger mt-4' role="alert">
-            Este coordenador já está cadastrado.
+    </div>
+    {% if email_existente %}
+        <div class="alert alert-danger mt-4" role="alert">
+            Este e-mail já está cadastrado como Professor.
         </div>
         {% endif %}
-    <!-- Rodapé da página -->
     <footer>
         <p>&copy; 2024 Locação de laboratórios</p>
-    </footer> 
+    </footer>
     <!-- Inclusão do JavaScript do Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Script para exibir alerta de sucesso após o cadastro -->
@@ -98,7 +101,7 @@
 
         // Se 'success' for igual a 'true', exibe um alerta de sucesso
         if (successParam === 'true') {
-            alert('Coordenador cadastrado com sucesso!');
+            alert('professor cadastrado com sucesso!');
         }
     </script>
 </body>

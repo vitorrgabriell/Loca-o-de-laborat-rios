@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Título da página -->
+    <title>Cadastrar Requisitos</title>
+    <!-- Inclusão do CSS do Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Estilos personalizados -->
+    <style>
+        /* Estilos personalizados */
+        .container {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Cabeçalho da página -->
+    <header>
+        <div class="container">
+            <div class="text-center">
+                <!-- Logo -->
+                <img src="{{ url_for('static', filename='img/icon.png') }}" alt="logo" height="80"> 
+                <!-- Título -->
+                <h1 class="mt-3">Locação de Laboratórios</h1>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <!-- Título do formulário -->
+        <h2 class="mb-4">Cadastrar Requisitos</h2>
+        <!-- Formulário de cadastro de requisitos -->
+        <form action="{{ url_for('cadastrar_requisitos') }}" method="post">
+            <!-- Campo para selecionar a matéria -->
+            <div class="mb-3">
+                <label for="disciplina_selecionada" class="form-label">Matéria desejada:</label>
+                <select class="form-select" id="disciplina_selecionada" name="disciplina_selecionada" required>
+                    <option value="" selected disabled>Selecione a matéria</option>
+                </select>
+            </div>
+            <!-- Campo para o nome do requisito -->
+            <div class="mb-3">
+                <label for="nome_requisito" class="form-label">Nome do Requisito:</label>
+                <input type="text" class="form-control" id="nome_requisito" name="nome_requisito" required>
+            </div>
+            <!-- Botão de envio do formulário -->
+            <button type="submit" class="btn btn-primary">Cadastrar</button>
+            <!-- Link para o menu principal -->
+            <a href="/dashboard_coordenador" class="btn btn-secondary">Menu Principal</a>
+        </form>
+        <!-- Exibição dos requisitos -->
+        <div id="requisitos_section" style="display: none;">
+            <label for="requisitos" class="form-label">Requisitos:</label>
+            <ul id="requisitos" class="list-group">
+                <!-- Os requisitos serão preenchidos dinamicamente via JavaScript -->
+            </ul>
+        </div>
+    </div>
+    <!-- Inclusão do JavaScript do Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Script para preencher dinamicamente o select das disciplinas -->
+    <script>
+       function carregarDisciplinas() {
+        fetch('/get_disciplinas')
+            .then(response => response.json())
+            .then(data => {
+                const select = document.getElementById('disciplina_selecionada');
+                data.disciplinas.forEach(disciplina => {
+                    const option = document.createElement('option');
+                    option.value = disciplina;
+                    option.text = disciplina;
+                    select.appendChild(option);
+                });
+            });
+    }
+
+    // Chamar a função para carregar as disciplinas quando a página carregar
+    window.onload = carregarDisciplinas;
+
+     // Verifica se o parâmetro 'success' está presente na URL e é igual a 'true'
+     const urlParams = new URLSearchParams(window.location.search);
+         const successParam = urlParams.get('success');
+ 
+         // Se 'success' for igual a 'true', exibe um alerta de sucesso
+         if (successParam === 'true') {
+             alert('Requisito cadastrado com sucesso!');
+         }
+    </script>
+</body>
+</html>

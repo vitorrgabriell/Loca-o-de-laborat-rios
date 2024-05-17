@@ -16,7 +16,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 40vh;
+            height: 40vh; /* Define a altura da div para ocupar toda a altura da tela */
             border-radius: 20px;
             margin-top: 30px;
         }
@@ -29,7 +29,7 @@
             padding: 20px 0; /* Espaçamento interno do footer */
             text-align: center; /* Alinhamento do texto no centro */
             width: 100%; /* Largura total do footer */
-            position: fixed; /* Fixar o footer na parte inferior da tela */
+            position: relative; /* Fixar o footer na parte inferior da tela */
             bottom: 0; /* Alinhar o footer na parte inferior da tela */
             left: 0; /* Alinhar o footer na parte esquerda da tela */
         }
@@ -44,27 +44,17 @@
                 <img src="{{ url_for('static', filename='img/icon.png') }}" alt="logo" height="80"> 
                 <!-- Título -->
                 <h1 class="mt-3">Locação de Laboratórios</h1>
-                <!-- Botões -->
                 <form action="{{ url_for('logout') }}" method="get" class="botoes-header">
                     <button type="submit" class="btn btn-danger mt-3 me-2">Logout</button>
                 </form>
             </div>
         </div>
     </header>
-    
-    <!-- Conteúdo principal da página -->
-    <div class="container">
+     <!-- Conteúdo principal da página -->
+     <div class="container">
         <div class="d-grid gap-2 col-6 mx-auto">
-            <!-- Botão para cadastrar laboratório -->
-            <a href="{{ url_for('cadastrar_laboratorio_form') }}" class="btn btn-primary">Laboratórios</a>
-            <!-- Botão para cadastrar coordenador -->
-            <a href="{{ url_for('cadastrar_coordenador_form') }}" class="btn btn-primary">Coordenadores</a>
-            <!-- Botão para cadastrar responsável -->
-            <a href="{{ url_for('cadastrar_responsavel_form') }}" class="btn btn-primary">Responsáveis</a>
-            <!-- Botão para cadastrar professor -->
-            <a href="{{ url_for('cadastrar_professor_form') }}" class="btn btn-primary">Professores</a>
-            <!-- Botão para alocações pendentes -->
-            <a href="{{ url_for('visualizar_alocacoes_pendentes') }}" class="btn btn-primary">Alocações</a>
+            <!-- Botão para alocar laboratorio -->
+            <a href="{{ url_for('alocar_laboratorio_form') }}" class="btn btn-primary">Solicitar Alocação</a>
         </div>
     </div>
     <!-- Rodapé da página -->

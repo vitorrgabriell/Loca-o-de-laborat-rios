@@ -2,7 +2,7 @@
 <html>
 <head>
     <!-- Título da página -->
-    <title>Cadastrar Laboratório</title>
+    <title>Laboratórios</title>
     <!-- Inclusão do CSS do Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Estilos personalizados -->
@@ -10,6 +10,18 @@
         /* Estilos personalizados */
         .container {
             margin-top: 50px;
+        }
+        button{
+            display: flex;
+        }
+        footer {
+            background-color: #f8f9fa; /* Cor de fundo do footer */
+            padding: 20px 0; /* Espaçamento interno do footer */
+            text-align: center; /* Alinhamento do texto no centro */
+            width: 100%; /* Largura total do footer */
+            position: relative; /* Fixar o footer na parte inferior da tela */
+            bottom: 0; /* Alinhar o footer na parte inferior da tela */
+            left: 0; /* Alinhar o footer na parte esquerda da tela */
         }
     </style>
 </head>
@@ -26,31 +38,126 @@
         </div>
     </header>
     <div class="container">
-        <!-- Título do formulário -->
-        <h2 class="mb-4">Cadastrar Laboratório</h2>
-        <!-- Formulário de cadastro de laboratório -->
-        <form action="{{ url_for('cadastrar_laboratorio') }}" method="post">
-            <!-- Campo para o nome do laboratório -->
-            <div class="mb-3">
-                <label for="nome_laboratorio" class="form-label">Nome do Laboratório:</label>
-                <input type="text" class="form-control" id="nome_laboratorio" name="nome_laboratorio" required>
-            </div>
-            <!-- Campo para a quantidade de computadores -->
-            <div class="mb-3">
-                <label for="quantidade_computadores" class="form-label">Quantidade de Computadores:</label>
-                <input type="number" class="form-control" id="quantidade_computadores" name="quantidade_computadores" required>
-            </div>
-            <!-- Botão de envio do formulário -->
-            <button type="submit" class="btn btn-primary">Cadastrar</button>
-            <!-- Link para o menu principal -->
-            <a href="/dashboard_diretor" class="btn btn-secondary">Menu Principal</a>
+        <!-- Tabela de Laboratórios -->
+        <div class="container mt-5">
+            <h2>Laboratórios Cadastrados</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Quantidade de Computadores</th>
+                        <th scope="col">Configurações dos computadores </th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for laboratorio in laboratorios %}
+                    {% set modal_id = laboratorio.nome.replace(' ', '-').replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u') %}
+<tr>
+    <td>{{ laboratorio.nome }}</td>
+    <td>{{ laboratorio.quantidade_computadores }}</td>
+    <td>{{ laboratorio.hardware_computador }}</td>
+    <td>
+        <!-- Botão "Editar" dentro do loop de laboratórios -->
+        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editarLaboratorio{{ modal_id }}">
+            Editar
+        </button>
+        <form action="{{ url_for('remover_laboratorio', nome_laboratorio=laboratorio.nome) }}" method="post">
+            <button type="submit" class="btn btn-danger">Excluir</button>
         </form>
-        {% if laboratorio_existente %}
-        <div class="alert alert-danger mt-4" role="alert">
-            Este laboratorio já está cadastrado.
+    </td>
+</tr>
+<!-- Modal de edição de laboratório -->
+<div class="modal fade" id="editarLaboratorio{{ modal_id }}" tabindex="-1" aria-labelledby="editarLaboratorioLabel{{ modal_id }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarLaboratorioLabel{{ laboratorio.nome }}">Editar Laboratório</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ url_for('editar_laboratorio', nome_laboratorio=laboratorio.nome) }}" method="post">
+                <div class="modal-body">
+                    <!-- Campos de edição de laboratório -->
+                    <div class="mb-3">
+                        <label for="edit_nome_laboratorio" class="form-label">Nome do Laboratório:</label>
+                        <input type="text" class="form-control" id="edit_nome_laboratorio" name="edit_nome_laboratorio" value="{{ laboratorio.nome }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_quantidade_computadores" class="form-label">Quantidade de Computadores:</label>
+                        <input type="number" class="form-control" id="edit_quantidade_computadores" name="edit_quantidade_computadores" value="{{ laboratorio.quantidade_computadores }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_hardwares" class="form-label">Hardwares:</label>
+                        <select class="form-select" aria-label="Selecione a CPU e a memória RAM dos computadores do laboratório" name="edit_hardwares" multiple>
+                            <option selected disabled>Selecione a CPU e a memória RAM dos computadores do laboratório</option>
+                            <option value="i3 10100F,6 gb">i3 10100F - 8 gb</option>
+                            <option value="i5 10500T,8 gb">i5 10500T - 8 gb</option>
+                            <option value="i5 12500TE,12 gb">i5 12500T - 16 gb</option>
+                            <option value="i7 1270P,16 gb">i7 12700f - 16 gb</option>
+                            <option value="i7 12800HL,24 gb">i7 11800h - 24 gb</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                </div>
+            </form>
         </div>
-        {% endif %}
     </div>
+</div>
+{% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+        <p>
+            <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Cadastrar Laboratório
+            </a>
+            <a href="/dashboard_diretor" class="btn btn-secondary">Menu Principal</a>
+        </p>
+        <div class="collapse" id="collapseExample">
+            <div class="card card-body">
+                <!-- Formulário de cadastro de laboratório -->
+                <form action="{{ url_for('cadastrar_laboratorio') }}" method="post">
+                    <!-- Campo para o nome do laboratório -->
+                    <div class="mb-3">
+                        <label for="nome_laboratorio" class="form-label">Nome do Laboratório:</label>
+                        <input type="text" class="form-control" id="nome_laboratorio" name="nome_laboratorio" required>
+                    </div>
+                    <!-- Campo para a quantidade de computadores -->
+                    <div class="mb-3">
+                        <label for="quantidade_computadores" class="form-label">Quantidade de Computadores:</label>
+                        <input type="number" class="form-control" id="quantidade_computadores" name="quantidade_computadores" required>
+                    </div>
+                    <div class="mb-3">
+                        <!-- Campo para o hardware dos computadores -->
+                        <label for="hardwares" class="form-label">Hardwares:</label>
+                        <select class="form-select" aria-label="Selecione a CPU e a memória RAM dos computadores do laboratório" name="hardwares" multiple>
+                            <option selected disabled>Selecione a CPU e a memória RAM dos computadores do laboratório</option>
+                            <option value="i3 10100F,6 gb">i3 10100F - 8 gb</option>
+                            <option value="i5 10500T,8 gb">i5 10500T - 8 gb</option>
+                            <option value="i5 12500TE,12 gb">i5 12500T - 16 gb</option>
+                            <option value="i7 1270P,16 gb">i7 12700f - 16 gb</option>
+                            <option value="i7 12800HL,24 gb">i7 11800h - 24 gb</option>
+                        </select>
+                    </div>
+                    <!-- Botão de envio do formulário -->
+                    <button type="submit" class="btn btn-primary">Cadastrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+                {% if laboratorio_existente %}
+                <div class="alert alert-danger mt-4" role="alert">
+                    Este laboratório já está cadastrado.
+                </div>
+                {% endif %}
+    <!-- Rodapé da página -->
+    <footer>
+        <p>&copy; 2024 Locação de laboratórios</p>
+    </footer> 
     <!-- Inclusão do JavaScript do Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Script para exibir alerta de sucesso após o cadastro -->
@@ -62,6 +169,12 @@
         // Se 'success' for igual a 'true', exibe um alerta de sucesso
         if (successParam === 'true') {
             alert('Laboratório cadastrado com sucesso!');
+        }
+        else if(successParam === 'updated'){
+            alert('Laboratório atualizado com sucesso!');
+        }
+        else if(successParam === 'deleted'){
+            alert('Laboratório excluído com sucesso!');
         }
     </script>
 </body>
