@@ -1,6 +1,14 @@
 CREATE DATABASE IF NOT EXISTS locacaolab;
 USE locacaolab;
 
+CREATE TABLE IF NOT EXISTS `laboratorios` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(100) NOT NULL,
+  `quantidade_computadores` int(11) NOT NULL,
+  `hardware_computador` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 CREATE TABLE IF NOT EXISTS `aplicacoes_laboratorios` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nome_aplicacao` varchar(100) NOT NULL,
@@ -27,14 +35,6 @@ CREATE TABLE IF NOT EXISTS `disciplinas` (
   `duracao` time NOT NULL,
   `horario_inicio` time NOT NULL,
   `horario_fim` time NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-CREATE TABLE IF NOT EXISTS `laboratorios` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(100) NOT NULL,
-  `quantidade_computadores` int(11) NOT NULL,
-  `hardware_computador` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
