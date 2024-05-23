@@ -76,57 +76,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.1/main.min.js"></script>
     <script>
-        function carregarDisciplinas() {
-            fetch('/get_disciplinas')
-                .then(response => response.json())
-                .then(data => {
-                    const select = document.getElementById('disciplina_selecionada');
-                    data.disciplinas.forEach(disciplina => {
-                        const option = document.createElement('option');
-                        option.value = disciplina;
-                        option.text = disciplina;
-                        select.appendChild(option);
-                    });
-                });
-        }
-
-        window.onload = carregarDisciplinas;
-
         function calcularDiaSemana() {
             var dataSelecionada = new Date($('#data').val());
             var diasSemana = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
             var diaSemana = diasSemana[dataSelecionada.getDay()];
             $('#dia_semana').val(diaSemana);
-        }
-
-        function carregarLaboratorios() {
-            fetch('/obter_laboratorios')
-                .then(response => response.json())
-                .then(data => {
-                    const selectLaboratorios = document.getElementById('laboratorio_selecionado');
-                    selectLaboratorios.innerHTML = '';
-
-                    const defaultOption = document.createElement('option');
-                    defaultOption.value = '';
-                    defaultOption.text = 'Selecione o laboratório';
-                    defaultOption.disabled = true;
-                    defaultOption.selected = true;
-                    selectLaboratorios.appendChild(defaultOption);
-
-                    data.laboratorios.forEach(laboratorio => {
-                        const option = document.createElement('option');
-                        option.value = laboratorio;
-                        option.text = laboratorio;
-                        selectLaboratorios.appendChild(option);
-                    });
-                })
-                .catch(error => {
-                    console.error('Erro ao carregar laboratórios:', error);
-                });
-        }
-
-        window.addEventListener('load', carregarLaboratorios);
-        
+        }        
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendario');
             var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -143,6 +98,14 @@
             });
             calendar.render();
         });
+        const urlParams = new URLSearchParams(window.location.search);
+    const successParam = urlParams.get('success');
+    if(successParam === 'true'){
+        alert("Solicitação concluida, aguardando aprovação do diretor");
+    }
+    else if(successParam === 'alocado'){
+        alert("Solicitação recusada, laboratorio ja esta alocado para a data e hora escolhidos")
+    }
     </script>
 </body>
 </html>

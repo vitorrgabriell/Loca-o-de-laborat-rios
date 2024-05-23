@@ -178,16 +178,18 @@ def cadastrar_professor_form():
     else:
         return redirect('/')
     
-@app.route('/alocar_laboratorio_form', methods=['GET'])
+@app.route('/alocar_laboratorio_form')
 def alocar_laboratorio_form():
-    if 'professor' in session:
-        cursor = conn.cursor()
-        cursor.execute('SELECT nome FROM disciplinas')
-        disciplinas = [row[0] for row in cursor.fetchall()]
-        cursor.close()
-        return render_template('alocar_laboratorio.html')
-    else:
-        return redirect('/')
+    cursor = conn.cursor()
+    cursor.execute("SELECT nome FROM laboratorios")
+    laboratorios = [row[0] for row in cursor.fetchall()]
+
+    cursor.execute("SELECT nome FROM disciplinas")
+    disciplinas = [row[0] for row in cursor.fetchall()]
+
+    cursor.close()
+
+    return render_template('alocar_laboratorio.html', laboratorios=laboratorios, disciplinas=disciplinas)
 
 @app.route('/aprovar_alocacao_form', methods=['GET', 'POST'])
 def aprovar_alocacao_form():
@@ -346,6 +348,8 @@ def visualizar_alocacoes_pendentes():
     cursor.close()
     return redirect(url_for('visualizar_alocacoes_pendentes_form'))
 
+from datetime import datetime, timedelta
+
 @app.route('/realizar_alocacao', methods=['GET', 'POST'])
 def realizar_alocacao():
     if 'professor' in session:
@@ -354,25 +358,38 @@ def realizar_alocacao():
             disciplina = request.form['disciplina_selecionada']
             data_selecionada = request.form['data']
             hora_selecionada = request.form['hora']
+            marcar_proximas_aulas = request.form.get('marcar_proximas_aulas', 'false') == 'true'
             
             # Verificar se o laboratório já foi solicitado para a data e hora especificadas
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM solicitacoes_aceitas WHERE laboratorio = %s AND data = %s AND hora = %s", 
-                           (laboratorio_selecionado, data_selecionada, hora_selecionada))
-            existe_solicitacao = cursor.fetchone()
-            cursor.close()
-            
-            if existe_solicitacao:
-                # Se existir uma solicitação aceita para o laboratório na mesma data e hora, retornar uma mensagem de erro
-                return redirect(url_for('alocar_laboratorio_form', success='alocado'))
-            else:
-                # Se o laboratório ainda não foi solicitado para a data e hora especificadas, inserir a nova solicitação
-                cursor = conn.cursor()
+
+            # Helper function to insert a request
+            def inserir_solicitacao(data):
+                cursor.execute("SELECT * FROM solicitacoes_aceitas WHERE laboratorio = %s AND data = %s AND hora = %s", 
+                               (laboratorio_selecionado, data, hora_selecionada))
+                existe_solicitacao = cursor.fetchone()
+                if existe_solicitacao:
+                    return False
                 cursor.execute("INSERT INTO solicitacoes_alocacao (laboratorio, disciplina, data, hora, estado) VALUES (%s, %s, %s, %s, 'pendente')", 
-                               (laboratorio_selecionado, disciplina, data_selecionada, hora_selecionada))
-                conn.commit()
-                cursor.close()
-                return redirect(url_for('alocar_laboratorio_form', success='true'))
+                               (laboratorio_selecionado, disciplina, data, hora_selecionada))
+                return True
+
+            datas_a_solicitar = [data_selecionada]
+            if marcar_proximas_aulas:
+                data_base = datetime.strptime(data_selecionada, "%Y-%m-%d")
+                for i in range(1, 4):
+                    proxima_data = data_base + timedelta(days=i * 7)
+                    datas_a_solicitar.append(proxima_data.strftime("%Y-%m-%d"))
+            
+            for data in datas_a_solicitar:
+                if not inserir_solicitacao(data):
+                    cursor.close()
+                    return redirect(url_for('alocar_laboratorio_form', success='alocado'))
+            
+            conn.commit()
+            cursor.close()
+            return redirect(url_for('alocar_laboratorio_form', success='true'))
+
         else:
             return render_template('alocar_laboratorio.html')
     else:
