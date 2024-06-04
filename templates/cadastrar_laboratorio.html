@@ -13,6 +13,7 @@
         }
         button{
             display: flex;
+
         }
         footer {
             background-color: #f8f9fa; /* Cor de fundo do footer */
@@ -58,14 +59,14 @@
     <td>{{ laboratorio.quantidade_computadores }}</td>
     <td>{{ laboratorio.hardware_computador }}</td>
     <td>
-        <!-- Botão "Editar" dentro do loop de laboratórios -->
-        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editarLaboratorio{{ modal_id }}">
-            Editar
-        </button>
-        <form action="{{ url_for('remover_laboratorio', nome_laboratorio=laboratorio.nome) }}" method="post">
-            <button type="submit" class="btn btn-danger">Excluir</button>
-        </form>
-    </td>
+       <div class="d-flex">
+    <button type="button" class="btn btn-warning flex-grow-1 me-2" data-bs-toggle="modal" data-bs-target="#editarLaboratorio{{ modal_id }}">
+        Editar  
+    </button>
+    <form action="{{ url_for('remover_laboratorio', nome_laboratorio=laboratorio.nome) }}" method="post" class="flex-grow-1">
+        <button type="submit" class="btn btn-danger w-100">Excluir</button>
+    </form>
+</div>
 </tr>
 <!-- Modal de edição de laboratório -->
 <div class="modal fade" id="editarLaboratorio{{ modal_id }}" tabindex="-1" aria-labelledby="editarLaboratorioLabel{{ modal_id }}" aria-hidden="true">
@@ -121,28 +122,76 @@
             <div class="card card-body">
                 <!-- Formulário de cadastro de laboratório -->
                 <form action="{{ url_for('cadastrar_laboratorio') }}" method="post">
-                    <!-- Campo para o nome do laboratório -->
                     <div class="mb-3">
                         <label for="nome_laboratorio" class="form-label">Nome do Laboratório:</label>
                         <input type="text" class="form-control" id="nome_laboratorio" name="nome_laboratorio" required>
                     </div>
-                    <!-- Campo para a quantidade de computadores -->
                     <div class="mb-3">
                         <label for="quantidade_computadores" class="form-label">Quantidade de Computadores:</label>
                         <input type="number" class="form-control" id="quantidade_computadores" name="quantidade_computadores" required>
                     </div>
-                    <div class="mb-3">
-                        <!-- Campo para o hardware dos computadores -->
-                        <label for="hardwares" class="form-label">Hardwares:</label>
-                        <select class="form-select" aria-label="Selecione a CPU e a memória RAM dos computadores do laboratório" name="hardwares" multiple>
-                            <option selected disabled>Selecione a CPU e a memória RAM dos computadores do laboratório</option>
-                            <option value="i3 10100F,6 gb">i3 10100F - 8 gb</option>
-                            <option value="i5 10500T,8 gb">i5 10500T - 8 gb</option>
-                            <option value="i5 12500TE,12 gb">i5 12500T - 16 gb</option>
-                            <option value="i7 1270P,16 gb">i7 12700f - 16 gb</option>
-                            <option value="i7 12800HL,24 gb">i7 11800h - 24 gb</option>
-                        </select>
-                    </div>
+                
+                   <!-- Campo para a seleção de CPUs e Memória RAM -->
+<div class="mb-3 row">
+    <div class="col-md-6">
+        <label for="cpus" class="form-label">CPUs:</label>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Selecionar</th>
+                    <th scope="col">CPU</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="checkbox" name="cpus" value="i3 10100F"></td>
+                    <td>i3 10100F</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="cpus" value="i5 10500T"></td>
+                    <td>i5 10500T</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="cpus" value="i5 12500TE"></td>
+                    <td>i5 12500TE</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="cpus" value="i7 1270P"></td>
+                    <td>i7 12700f</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="cpus" value="i7 12800HL"></td>
+                    <td>i7 11800h</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <label for="rams" class="form-label">Memória RAM:</label>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Selecionar</th>
+                    <th scope="col">Memória RAM</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="checkbox" name="rams" value="8 gb"></td>
+                    <td>8 gb</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="rams" value="16 gb"></td>
+                    <td>16 gb</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="rams" value="24 gb"></td>
+                    <td>24 gb</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
                     <!-- Botão de envio do formulário -->
                     <button type="submit" class="btn btn-primary">Cadastrar</button>
                 </form>

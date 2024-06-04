@@ -198,13 +198,13 @@ def aprovar_alocacao_form():
     else:
         return redirect('/')
     
-# Rota para cadastrar um laboratório
 @app.route('/cadastrar_laboratorio', methods=['POST'])
 def cadastrar_laboratorio():
     if 'usuario' in session:
         nome_laboratorio = request.form['nome_laboratorio']
         quantidade_computadores = request.form['quantidade_computadores']
-        hardwares = request.form.getlist('hardwares')
+        cpu = request.form.getlist('cpus')
+        ram = request.form.getlist('rams')
 
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM laboratorios WHERE nome = %s', (nome_laboratorio,))
@@ -215,46 +215,56 @@ def cadastrar_laboratorio():
             return render_template('cadastrar_laboratorio.html', laboratorio_existente=True)
         else:
             cursor = conn.cursor()
-            hardwares_str = ','.join(hardwares)
+            cpus_str = ','.join(cpu)
+            rams_str = ','.join(ram)
+            hardwares_str = f"CPU: {cpus_str} | RAM: {rams_str}"
             cursor.execute("INSERT INTO laboratorios (nome, quantidade_computadores, hardware_computador) VALUES (%s, %s, %s)", 
                             (nome_laboratorio, quantidade_computadores, hardwares_str))
             conn.commit()
             cursor.close()
-            return redirect(url_for('cadastrar_laboratorio_form', success='true')) 
+            return redirect(url_for('cadastrar_laboratorio_form', success='true'))
     else:
         return redirect('/')
 
+
 @app.route('/editar_laboratorio/<nome_laboratorio>', methods=['POST'])
 def editar_laboratorio(nome_laboratorio):
-    # Obtenha os dados do formulário enviado pelo frontend
-    edit_nome_laboratorio = request.form['edit_nome_laboratorio']
-    edit_quantidade_computadores = request.form['edit_quantidade_computadores']
-    edit_hardwares = request.form.getlist('edit_hardwares')
+    if 'usuario' in session:
+        edit_nome_laboratorio = request.form['edit_nome_laboratorio']
+        edit_quantidade_computadores = request.form['edit_quantidade_computadores']
+        cpu = request.form.getlist('cpus')
+        ram = request.form.getlist('rams')
 
-    # Realize a operação de edição no banco de dados usando o nome do laboratório
-    cursor = conn.cursor()
-    edit_hardwares_str = ','.join(edit_hardwares)
-    cursor.execute("UPDATE laboratorios SET nome = %s, quantidade_computadores = %s, hardware_computador = %s WHERE nome = %s",
-                    (edit_nome_laboratorio, edit_quantidade_computadores, edit_hardwares_str, nome_laboratorio))
-    conn.commit()
-    cursor.close()
+        cursor = conn.cursor()
+        cpus_str = ','.join(cpu)
+        rams_str = ','.join(ram)
+        hardwares_str = f"CPUs: {cpus_str} | RAMs: {rams_str}"
+        cursor.execute("UPDATE laboratorios SET nome = %s, quantidade_computadores = %s, hardware_computador = %s WHERE nome = %s",
+                        (edit_nome_laboratorio, edit_quantidade_computadores, hardwares_str, nome_laboratorio))
+        conn.commit()
+        cursor.close()
+        
+        return redirect(url_for('cadastrar_laboratorio_form', success='updated'))
+    else:
+        return redirect('/')
 
-    # Redirecione para a página de cadastro com a lista atualizada
-    return redirect(url_for('cadastrar_laboratorio_form', success='updated'))
 
 @app.route('/remover_laboratorio/<nome_laboratorio>', methods=['POST'])
 def remover_laboratorio(nome_laboratorio):
     if 'usuario' in session:
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM laboratorios WHERE nome = %s", (nome_laboratorio,))
-        conn.commit()
-        cursor.close()
-
-        # Após remover o laboratório, redirecione para a página de cadastro com a lista atualizada
+        cursor.execute("SELECT id FROM laboratorios WHERE nome = %s", (nome_laboratorio,))
+        laboratorio = cursor.fetchone()
+        
+        if laboratorio:
+            laboratorio_id = laboratorio[0]
+            cursor.execute("DELETE FROM aplicacoes_laboratorios WHERE laboratorio_id = %s", (laboratorio_id,))
+            cursor.execute("DELETE FROM laboratorios WHERE id = %s", (laboratorio_id,))
+            conn.commit()
+            cursor.close()
         return redirect(url_for('cadastrar_laboratorio_form', success='deleted'))
     else:
         return redirect('/')
-
 
 # Rota para cadastrar um coordenador
 @app.route('/cadastrar_coordenador', methods=['POST'])
