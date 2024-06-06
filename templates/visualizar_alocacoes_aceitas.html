@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprovação de Alocações</title>
+    <!-- Adicionando o Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Cabeçalho da página -->
+    <header>
+        <div class="container">
+            <div class="text-center">
+                <!-- Logo -->
+                <img src="{{ url_for('static', filename='img/icon.png') }}" alt="logo" height="80"> 
+                <!-- Título -->
+                <h1 class="mt-3">Locação de Laboratórios</h1>
+                <form action="{{ url_for('logout') }}" method="get" class="botoes-header">
+                    <a href="/dashboard_diretor" class="btn btn-secondary">Menu Principal</a>
+                </form>
+            </div>
+        </div>
+    </header>
+    <div class="container mt-5">
+        <h1 class="mb-4">Solicitações de Alocação</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Laboratório</th>
+                    <th>Disciplina</th>
+                    <th>Data</th>
+                    <th>Hora</th>
+                    <th>Saída</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for solicitacao_aceita in solicitacoes_aceitas %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ solicitacao_aceita.laboratorio }}</td>
+                    <td>{{ solicitacao_aceita.disciplina }}</td>
+                    <td>{{ solicitacao_aceita.data }}</td>
+                    <td>{{ solicitacao_aceita.hora }}</td>
+                    <td>{{ solicitacao_aceita.saida }}</td>
+                    <td>{{ solicitacao_aceita.estado }}</td>
+                    <td>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
