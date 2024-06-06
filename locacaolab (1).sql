@@ -67,6 +67,7 @@ CREATE TABLE IF NOT EXISTS `solicitacoes_aceitas` (
   `disciplina` varchar(255) DEFAULT NULL,
   `data` date DEFAULT NULL,
   `hora` time DEFAULT NULL,
+  `saida` time DEFAULT NULL,
   `estado` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -76,6 +77,7 @@ CREATE TABLE IF NOT EXISTS `solicitacoes_alocacao` (
   `laboratorio` varchar(100) NOT NULL,
   `data` date NOT NULL,
   `hora` time NOT NULL,
+  `saida` time DEFAULT NULL,
   `estado` enum('pendente','aprovada','rejeitada') NOT NULL,
   `disciplina` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -87,6 +89,7 @@ CREATE TABLE IF NOT EXISTS `solicitacoes_recusadas` (
   `disciplina` varchar(255) DEFAULT NULL,
   `data` date DEFAULT NULL,
   `hora` time DEFAULT NULL,
+  `saida` time DEFAULT NULL,
   `estado` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
