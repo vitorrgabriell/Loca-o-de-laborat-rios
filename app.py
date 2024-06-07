@@ -1,7 +1,11 @@
 from flask import Flask, request, render_template, redirect, session, url_for, jsonify, flash
 import pymysql
+<<<<<<< HEAD
 from datetime import timedelta
 from flask_bcrypt import Bcrypt
+=======
+import datetime
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -68,6 +72,10 @@ def obter_laboratorios():
     cursor.close()
     return jsonify(laboratorios=laboratorios)
 
+<<<<<<< HEAD
+=======
+# Rota para exibir o formulário de login
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
 @app.route('/', methods=['GET', 'POST'])
 def realizar_login():
     if request.method == 'POST':
@@ -78,24 +86,41 @@ def realizar_login():
             return render_template('login.html', error_message='Acesso negado, email ou senha não fornecidos.')
 
         cursor = conn.cursor(pymysql.cursors.DictCursor)
+<<<<<<< HEAD
         cursor.execute('SELECT * FROM coordenadores WHERE email = %s', (usuario,))
         coordenador = cursor.fetchone()
         cursor.close()
 
         if coordenador and bcrypt.check_password_hash(coordenador['senha'], senha):
+=======
+        cursor.execute('SELECT * FROM coordenadores WHERE email = %s AND senha = %s', (usuario, senha))
+        coordenador = cursor.fetchone()
+        cursor.close()
+
+        if coordenador:
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
             session['coordenador'] = coordenador['email']
             return redirect('/dashboard_coordenador')
 
         cursor = conn.cursor(pymysql.cursors.DictCursor)
+<<<<<<< HEAD
         cursor.execute('SELECT * FROM responsavel_ti WHERE email = %s', (usuario,))
         responsavel = cursor.fetchone()
         cursor.close()
 
         if responsavel and bcrypt.check_password_hash(responsavel['senha'], senha):
+=======
+        cursor.execute('SELECT * FROM responsavel_ti WHERE email = %s AND senha = %s', (usuario, senha))
+        responsavel = cursor.fetchone()
+        cursor.close()
+
+        if responsavel:
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
             session['responsavel'] = responsavel['email']
             return redirect('/dashboard_responsavel')
 
         cursor = conn.cursor(pymysql.cursors.DictCursor)
+<<<<<<< HEAD
         cursor.execute('SELECT * FROM professores WHERE email = %s', (usuario,))
         professor = cursor.fetchone()
         cursor.close()
@@ -105,13 +130,33 @@ def realizar_login():
             return redirect('/dashboard_professor')
 
         if usuario == 'admin' and bcrypt.check_password_hash(bcrypt.generate_password_hash('12345').decode('utf-8'), senha):
+=======
+        cursor.execute('SELECT * FROM professores WHERE email = %s AND senha = %s', (usuario, senha))
+        professor = cursor.fetchone()
+        cursor.close()
+
+        if professor:
+            session['professor'] = professor['email']
+            return redirect('/dashboard_professor')
+
+        if usuario == 'admin' and senha == '12345':
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
             session['usuario'] = usuario
             return redirect('/dashboard_diretor')
 
         return render_template('login.html', error_message='Acesso negado, email ou senha incorretos.')
+<<<<<<< HEAD
     else:
         return render_template('login.html')
 
+=======
+
+    else:
+        return render_template('login.html')
+
+
+# Rota para o dashboard (página protegida)
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
 @app.route('/dashboard_diretor')
 def dashboard():
     if 'usuario' in session:
@@ -139,7 +184,12 @@ def dashboard_professor():
         return render_template('dashboard_professor.html')
     else:
         return redirect('/')
+<<<<<<< HEAD
     
+=======
+
+# Rota para o cadastro dos laboratorios (página protegida)
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
 @app.route('/cadastrar_laboratorio_form')
 def cadastrar_laboratorio_form():
     if 'usuario' in session:
@@ -163,7 +213,12 @@ def cadastrar_responsavel_form():
         return render_template('/cadastrar_responsavel.html', responsaveis = responsaveis)
     else:
         return redirect('/')
+<<<<<<< HEAD
 
+=======
+    
+# Rota para o cadastro dos professores (página protegida)
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
 @app.route('/cadastrar_professor_form')
 def cadastrar_professor_form():
     if 'usuario' in session:
@@ -172,6 +227,7 @@ def cadastrar_professor_form():
     else:
         return redirect('/')
     
+<<<<<<< HEAD
 @app.route('/alocar_laboratorio_form')
 def alocar_laboratorio_form():
     cursor = conn.cursor()
@@ -181,6 +237,18 @@ def alocar_laboratorio_form():
     disciplinas = [row[0] for row in cursor.fetchall()]
     cursor.close()
     return render_template('alocar_laboratorio.html', laboratorios=laboratorios, disciplinas=disciplinas)
+=======
+@app.route('/alocar_laboratorio_form', methods=['GET'])
+def alocar_laboratorio_form():
+    if 'professor' in session:
+        cursor = conn.cursor()
+        cursor.execute('SELECT nome FROM disciplinas')
+        disciplinas = [row[0] for row in cursor.fetchall()]
+        cursor.close()
+        return render_template('alocar_laboratorio.html')
+    else:
+        return redirect('/')
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
 
 @app.route('/aprovar_alocacao_form', methods=['GET', 'POST'])
 def aprovar_alocacao_form():
@@ -189,26 +257,40 @@ def aprovar_alocacao_form():
     else:
         return redirect('/')
     
+<<<<<<< HEAD
+=======
+# Rota para cadastrar um laboratório
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
 @app.route('/cadastrar_laboratorio', methods=['POST'])
 def cadastrar_laboratorio():
     if 'usuario' in session:
         nome_laboratorio = request.form['nome_laboratorio']
         quantidade_computadores = request.form['quantidade_computadores']
+<<<<<<< HEAD
         if int(quantidade_computadores) <= 0:
             return redirect(url_for('cadastrar_laboratorio_form', success='invalid'))
         cpu = request.form.getlist('cpus')
         ram = request.form.getlist('rams')
+=======
+        hardwares = request.form.getlist('hardwares')
+
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM laboratorios WHERE nome = %s', (nome_laboratorio,))
         laboratorio_existente = cursor.fetchone()
         cursor.close()
+
         if laboratorio_existente:
             return render_template('cadastrar_laboratorio.html', laboratorio_existente=True)
         else:
             cursor = conn.cursor()
+<<<<<<< HEAD
             cpus_str = ','.join(cpu)
             rams_str = ','.join(ram)
             hardwares_str = f"CPU: {cpus_str} | RAM: {rams_str}"
+=======
+            hardwares_str = ','.join(hardwares)
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
             cursor.execute("INSERT INTO laboratorios (nome, quantidade_computadores, hardware_computador) VALUES (%s, %s, %s)", 
                             (nome_laboratorio, quantidade_computadores, hardwares_str))
             conn.commit()
@@ -256,6 +338,42 @@ def remover_laboratorio(nome_laboratorio):
     else:
         return redirect('/')
 
+<<<<<<< HEAD
+=======
+@app.route('/editar_laboratorio/<nome_laboratorio>', methods=['POST'])
+def editar_laboratorio(nome_laboratorio):
+    # Obtenha os dados do formulário enviado pelo frontend
+    edit_nome_laboratorio = request.form['edit_nome_laboratorio']
+    edit_quantidade_computadores = request.form['edit_quantidade_computadores']
+    edit_hardwares = request.form.getlist('edit_hardwares')
+
+    # Realize a operação de edição no banco de dados usando o nome do laboratório
+    cursor = conn.cursor()
+    edit_hardwares_str = ','.join(edit_hardwares)
+    cursor.execute("UPDATE laboratorios SET nome = %s, quantidade_computadores = %s, hardware_computador = %s WHERE nome = %s",
+                    (edit_nome_laboratorio, edit_quantidade_computadores, edit_hardwares_str, nome_laboratorio))
+    conn.commit()
+    cursor.close()
+
+    # Redirecione para a página de cadastro com a lista atualizada
+    return redirect(url_for('cadastrar_laboratorio_form', success='updated'))
+
+@app.route('/remover_laboratorio/<nome_laboratorio>', methods=['POST'])
+def remover_laboratorio(nome_laboratorio):
+    if 'usuario' in session:
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM laboratorios WHERE nome = %s", (nome_laboratorio,))
+        conn.commit()
+        cursor.close()
+
+        # Após remover o laboratório, redirecione para a página de cadastro com a lista atualizada
+        return redirect(url_for('cadastrar_laboratorio_form', success='deleted'))
+    else:
+        return redirect('/')
+
+
+# Rota para cadastrar um coordenador
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
 @app.route('/cadastrar_coordenador', methods=['POST'])
 def cadastrar_coordenador():
     if 'usuario' in session:
@@ -315,13 +433,18 @@ def cadastrar_responsavel():
         else:
             cursor = conn.cursor()
             cursor.execute('INSERT INTO responsavel_ti (nome, email, senha) VALUES (%s, %s, %s)',
+<<<<<<< HEAD
                            (nome_responsavel, email_responsavel, senha_hash))
+=======
+                           (nome_responsavel, email_responsavel, senha_responsavel))
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
             conn.commit()
             cursor.close()
             return redirect(url_for('cadastrar_responsavel_form', success='true'))
     else:
         return redirect('/')
     
+<<<<<<< HEAD
 @app.route('/remover_responsavel/<nome_responsavel>', methods=['POST'])
 def remover_responsavel(nome_responsavel):
     if 'usuario' in session:
@@ -342,13 +465,19 @@ def remover_responsavel(nome_responsavel):
     else:
         return redirect('/')
 
+=======
+# Rota para cadastrar um professor
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
 @app.route('/cadastrar_professor', methods=['POST'])
 def cadastrar_professor():
     if 'usuario' in session:
         nome_professor = request.form['nome_professor']
         email_professor = request.form['email_professor']
         senha_professor = request.form['senha_professor']
+<<<<<<< HEAD
         senha_hash = bcrypt.generate_password_hash(senha_professor).decode('utf-8')
+=======
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM professores WHERE email = %s', (email_professor,))
         professor_existente = cursor.fetchone()
@@ -358,12 +487,17 @@ def cadastrar_professor():
         else:
             cursor = conn.cursor()
             cursor.execute('INSERT INTO professores (nome, email, senha) VALUES (%s, %s, %s)',
+<<<<<<< HEAD
                            (nome_professor, email_professor, senha_hash))
+=======
+                           (nome_professor, email_professor, senha_professor))
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
             conn.commit()
             cursor.close()
             return redirect(url_for('cadastrar_professor_form', success='true'))
     else:
         return redirect('/')
+<<<<<<< HEAD
     
 @app.route('/remover_professor/<nome_professor>', methods=['POST'])
 def remover_professor(nome_professor):
@@ -384,6 +518,8 @@ def remover_professor(nome_professor):
             cursor.close()
     else:
         return redirect('/')
+=======
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
 
 @app.route('/visualizar_alocacoes_pendentes_form')
 def visualizar_alocacoes_pendentes_form():
@@ -392,6 +528,7 @@ def visualizar_alocacoes_pendentes_form():
         return render_template('visualizar_alocacoes_pendentes.html', solicitacoes = solicitacoes)
     else:
         return redirect('/')
+<<<<<<< HEAD
     
 @app.route('/visualizar_alocacoes_aceitas_form')
 def visualizar_alocacoes_aceitas_form():
@@ -429,6 +566,9 @@ def get_solicitacoes_aceitas():
     cursor.close()
     return solicitacoes_aceitas
                    
+=======
+
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
 def get_solicitacoes():
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     cursor.execute('SELECT * FROM solicitacoes_alocacao')
@@ -436,6 +576,7 @@ def get_solicitacoes():
     cursor.close()
     return solicitacoes
 
+<<<<<<< HEAD
 @app.route('/visualizar_alocacoes_pendentes', methods=['GET'])
 def visualizar_alocacoes_pendentes():
     if 'usuario' in session:
@@ -449,6 +590,15 @@ def visualizar_alocacoes_pendentes():
 
 import datetime
 from datetime import timedelta
+=======
+@app.route('/visualizar_alocacoes_pendentes')
+def visualizar_alocacoes_pendentes():
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM solicitacoes_alocacao")
+    solicitacoes = cursor.fetchall()
+    cursor.close()
+    return redirect(url_for('visualizar_alocacoes_pendentes_form'))
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
 
 @app.route('/realizar_alocacao', methods=['GET', 'POST'])
 def realizar_alocacao():
@@ -458,6 +608,7 @@ def realizar_alocacao():
             disciplina = request.form['disciplina_selecionada']
             data_selecionada = request.form['data']
             hora_selecionada = request.form['hora']
+<<<<<<< HEAD
             saida = request.form['saida']
             marcar_proximas_aulas = request.form.get('marcar_proximas_aulas', 'false') == 'true'
             cursor = conn.cursor()
@@ -487,16 +638,41 @@ def realizar_alocacao():
             conn.commit()
             cursor.close()
             return redirect(url_for('alocar_laboratorio_form', success='true'))
+=======
+            
+            # Verificar se o laboratório já foi solicitado para a data e hora especificadas
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM solicitacoes_aceitas WHERE laboratorio = %s AND data = %s AND hora = %s", 
+                           (laboratorio_selecionado, data_selecionada, hora_selecionada))
+            existe_solicitacao = cursor.fetchone()
+            cursor.close()
+            
+            if existe_solicitacao:
+                # Se existir uma solicitação aceita para o laboratório na mesma data e hora, retornar uma mensagem de erro
+                return redirect(url_for('alocar_laboratorio_form', success='alocado'))
+            else:
+                # Se o laboratório ainda não foi solicitado para a data e hora especificadas, inserir a nova solicitação
+                cursor = conn.cursor()
+                cursor.execute("INSERT INTO solicitacoes_alocacao (laboratorio, disciplina, data, hora, estado) VALUES (%s, %s, %s, %s, 'pendente')", 
+                               (laboratorio_selecionado, disciplina, data_selecionada, hora_selecionada))
+                conn.commit()
+                cursor.close()
+                return redirect(url_for('alocar_laboratorio_form', success='true'))
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
         else:
             return render_template('alocar_laboratorio.html')
     else:
         return redirect('/')
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
 @app.route('/aceitar_solicitacao', methods=['POST'])
 def aceitar_solicitacao():
     if request.method == 'POST':
         solicitacao_id = request.form['solicitacao_id']
+<<<<<<< HEAD
         cursor = conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute("SELECT * FROM solicitacoes_alocacao WHERE id = %s", (solicitacao_id,))
         solicitacao = cursor.fetchone()
@@ -511,26 +687,65 @@ def aceitar_solicitacao():
         else:
             cursor.close()
             return redirect(url_for('visualizar_alocacoes_pendentes', error='Solicitação não encontrada'))
+=======
+        cursor = conn.cursor()
+        # Selecionar os dados da solicitação aceita
+        cursor.execute("SELECT * FROM solicitacoes_alocacao WHERE id = %s", (solicitacao_id,))
+        solicitacao = cursor.fetchone()
+        if solicitacao:
+            # Inserir os dados da solicitação aceita na tabela de solicitações aceitas
+            cursor.execute("INSERT INTO solicitacoes_aceitas (laboratorio, disciplina, data, hora, estado) VALUES (%s, %s, %s, %s, %s)",
+               (solicitacao[1], solicitacao[5], solicitacao[2], solicitacao[3], 'aceito'))
+            conn.commit()
+            # Excluir a solicitação da tabela original
+            cursor.execute("DELETE FROM solicitacoes_alocacao WHERE id = %s", (solicitacao_id,))
+            conn.commit()
+            cursor.close()
+            return redirect(url_for('visualizar_alocacoes_pendentes_form', success='accept')) 
+        else:
+            cursor.close()
+            # Se a solicitação não for encontrada, redirecione para algum lugar apropriado ou retorne uma mensagem de erro
+            return redirect(url_for('visualizar_alocacoes_pendentes_form', error='Solicitação não encontrada'))
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
 
 @app.route('/rejeitar_solicitacao', methods=['POST'])
 def rejeitar_solicitacao():
     if request.method == 'POST':
         solicitacao_id = request.form['solicitacao_id']
         cursor = conn.cursor()
+<<<<<<< HEAD
         cursor.execute("SELECT * FROM solicitacoes_alocacao WHERE id = %s", (solicitacao_id,))
         solicitacao = cursor.fetchone()
         if solicitacao:
             cursor.execute("INSERT INTO solicitacoes_recusadas (laboratorio, disciplina, data, hora, estado) VALUES (%s, %s, %s, %s, %s)",
                            (solicitacao[1], solicitacao[5], solicitacao[2], solicitacao[3], 'Recusado'))
             conn.commit()
+=======
+        # Selecionar os dados da solicitação recusada
+        cursor.execute("SELECT * FROM solicitacoes_alocacao WHERE id = %s", (solicitacao_id,))
+        solicitacao = cursor.fetchone()
+        if solicitacao:
+            # Inserir os dados da solicitação recusada na tabela de solicitações recusadas
+            cursor.execute("INSERT INTO solicitacoes_recusadas (laboratorio, disciplina, data, hora, estado) VALUES (%s, %s, %s, %s, %s)",
+                           (solicitacao[1], solicitacao[5], solicitacao[2], solicitacao[3], 'recusado'))
+            conn.commit()
+            # Excluir a solicitação da tabela original
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
             cursor.execute("DELETE FROM solicitacoes_alocacao WHERE id = %s", (solicitacao_id,))
             conn.commit()
             cursor.close()
             return redirect(url_for('visualizar_alocacoes_pendentes_form', success='recused')) 
         else:
             cursor.close()
+<<<<<<< HEAD
             return redirect(url_for('visualizar_alocacoes_pendentes_form', error='Solicitação não encontrada'))
 
+=======
+            # Se a solicitação não for encontrada, redirecione para algum lugar apropriado ou retorne uma mensagem de erro
+            return redirect(url_for('visualizar_alocacoes_pendentes_form', error='Solicitação não encontrada'))
+
+# Rota para cadastrar uma disciplina
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
 @app.route('/cadastrar_disciplina_form')
 def cadastrar_disciplina_form():
     if 'coordenador' in session:
@@ -569,6 +784,10 @@ def cadastrar_aplicacao_form():
     else:
         return redirect('/')
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
 @app.route('/get_requisitos', methods=['GET'])
 def get_requisitos():
     disciplina_selecionada = request.form['disciplina_selecionada']
@@ -635,13 +854,27 @@ def cadastrar_aplicacao():
     if 'responsavel' in session:
         nome_laboratorio = request.form['laboratorio_selecionado']
         nome_aplicacao = request.form['nome_aplicacao']
+<<<<<<< HEAD
+=======
+        
+        # Verificar se a aplicação já está cadastrada para o laboratório selecionado
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM aplicacoes_laboratorios WHERE nome_aplicacao = %s AND laboratorio_id = (SELECT id FROM laboratorios WHERE nome = %s)', (nome_aplicacao, nome_laboratorio))
         aplicacao_existente = cursor.fetchone()
         cursor.close()
+<<<<<<< HEAD
         if aplicacao_existente:
             flash('Esta aplicação já está cadastrada para o laboratório selecionado.')
             return redirect(url_for('cadastrar_aplicacao_form'))
+=======
+        
+        if aplicacao_existente:
+            flash('Esta aplicação já está cadastrada para o laboratório selecionado.')
+            return redirect(url_for('cadastrar_aplicacao_form'))
+        
+        # Se a aplicação não existir, continue com o cadastro
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
         else:
             versao_aplicacao = request.form['versao']
             cursor = conn.cursor()
@@ -652,6 +885,10 @@ def cadastrar_aplicacao():
             conn.commit()
             cursor.close()
             return redirect(url_for('cadastrar_aplicacao_form', success='true'))
+<<<<<<< HEAD
+=======
+
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
     else:
         return redirect('/')
 
@@ -665,4 +902,8 @@ def logout():
 
 if __name__ == '__main__':
     app.run(debug=True)
+<<<<<<< HEAD
     
+=======
+    
+>>>>>>> fd25e0877e90292b4e48c10c1844469c08508dba
