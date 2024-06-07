@@ -6,6 +6,22 @@
     <title>Aprovação de Alocações</title>
     <!-- Adicionando o Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Estilos personalizados -->
+    <style>
+        /* Estilos personalizados */
+        .container {
+            margin-top: 50px;
+        }
+        footer {
+            background-color: #f8f9fa; /* Cor de fundo do footer */
+            padding: 20px 0; /* Espaçamento interno do footer */
+            text-align: center; /* Alinhamento do texto no centro */
+            width: 100%; /* Largura total do footer */
+            position: fixed; /* Fixar o footer na parte inferior da tela */
+            bottom: 0; /* Alinhar o footer na parte inferior da tela */
+            left: 0; /* Alinhar o footer na parte esquerda da tela */
+        }
+    </style>
 </head>
 <body>
     <!-- Cabeçalho da página -->
@@ -32,6 +48,7 @@
                     <th>Disciplina</th>
                     <th>Data</th>
                     <th>Hora</th>
+                    <th>Saída</th>
                     <th>Estado</th>
                     <th>Ação</th>
                 </tr>
@@ -42,8 +59,9 @@
                     <td>{{ loop.index }}</td>
                     <td>{{ solicitacao.laboratorio }}</td>
                     <td>{{ solicitacao.disciplina }}</td>
-                    <td>{{ solicitacao.data }}</td>
+                    <td>{{ solicitacao.data.strftime('%d-%m-%Y') }}</td>
                     <td>{{ solicitacao.hora }}</td>
+                    <td>{{ solicitacao.saida }}</td>
                     <td>{{ solicitacao.estado }}</td>
                     <td>
                         <form method="post" action="/aceitar_solicitacao" style="display:inline;">
@@ -60,6 +78,10 @@
             </tbody>
         </table>
     </div>
+    <!-- Rodapé da página -->
+    <footer>
+        <p>&copy; 2024 Locação de laboratórios</p>
+    </footer> 
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>

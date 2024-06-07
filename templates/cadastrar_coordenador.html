@@ -35,55 +35,68 @@
         </div>
     </header>
     <div class="container">
-         <!-- Tabela de Laboratórios -->
-    <div class="container mt-5">
-        <h2>Coordenadores Cadastrados</h2>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">Nome</th>
-                    <th scope="col">Email</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for coordenador in coordenadores %}
-                <tr>
-                    <td>{{ coordenador.nome }}</td>
-                    <td>{{ coordenador.email }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+        <!-- Tabela de Coordenadores -->
+        <div class="container mt-5">
+            <h2>Coordenadores Cadastrados</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for coordenador in coordenadores %}
+                    <tr>
+                        <td>{{ coordenador.nome }}</td>
+                        <td>{{ coordenador.email }}</td>
+                        <td>
+                            <div class="d-flex">
+                                <form action="{{ url_for('remover_coordenador', nome_coordenador=coordenador.nome) }}" method="post" class="flex-grow-1">
+                                    <button type="submit" class="btn btn-danger w-100">Excluir</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
         <p>
             <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-              Cadastrar Coordenador
+                Cadastrar Coordenador
             </a>
             <a href="/dashboard_diretor" class="btn btn-secondary">Menu Principal</a>
-          </p>
-          <div class="collapse" id="collapseExample">
+        </p>
+        <div class="collapse" id="collapseExample">
             <div class="card card-body">
-              <!-- Formulário de cadastro de coordenador -->
-        <form action="{{ url_for('cadastrar_coordenador') }}" method="post">
-            <!-- Campo para o nome do coordenador -->
-            <div class="mb-3">
-                <label for="nome_coordenador" class="form-label">Nome do Coordenador:</label>
-                <input type="text" class="form-control" id="nome_coordenador" name="nome_coordenador" required>
-                <label for="email_coordenador" class="form-label">Email do Coordenador:</label>
-                <input type="email" class="form-control" id="email_coordenador" name="email_coordenador" required>
-                <label for="senha_coordenador" class="form-label">Senha do Coordenador:</label>
-                <input type="password" class="form-control" id="senha_coordenador" name="senha_coordenador" required>
+                <!-- Formulário de cadastro de coordenador -->
+                <form action="{{ url_for('cadastrar_coordenador') }}" method="post">
+                    <!-- Campo para o nome do coordenador -->
+                    <div class="mb-3">
+                        <label for="nome_coordenador" class="form-label">Nome do Coordenador:</label>
+                        <input type="text" class="form-control" id="nome_coordenador" name="nome_coordenador" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email_coordenador" class="form-label">Email do Coordenador:</label>
+                        <input type="email" class="form-control" id="email_coordenador" name="email_coordenador" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="senha_coordenador" class="form-label">Senha do Coordenador:</label>
+                        <input type="password" class="form-control" id="senha_coordenador" name="senha_coordenador" required>
+                    </div>
+                    <!-- Botão de envio do formulário -->
+                    <button type="submit" class="btn btn-primary">Cadastrar</button>
+                </form>
             </div>
-            <!-- Botão de envio do formulário -->
-            <button type="submit" class="btn btn-primary">Cadastrar</button>
-        </form>
-         </div>
         </div>
         {% if coordenador_existente %}
-        <div class = 'alert alert-danger mt-4' role="alert">
+        <div class="alert alert-danger mt-4" role="alert">
             Este coordenador já está cadastrado.
         </div>
         {% endif %}
+    </div>
     <!-- Rodapé da página -->
     <footer>
         <p>&copy; 2024 Locação de laboratórios</p>
@@ -99,6 +112,9 @@
         // Se 'success' for igual a 'true', exibe um alerta de sucesso
         if (successParam === 'true') {
             alert('Coordenador cadastrado com sucesso!');
+        }
+        else if(successParam === 'deleted'){
+            alert('Coordenador excluído com sucesso!');
         }
     </script>
 </body>

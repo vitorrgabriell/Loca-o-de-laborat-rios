@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS locacaolab;
-USE locacaolab;
+CREATE DATABASE IF NOT EXISTS locacao_lab;
+USE locacao_lab;
 
 CREATE TABLE IF NOT EXISTS `laboratorios` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `solicitacoes_alocacao` (
   `data` date NOT NULL,
   `hora` time NOT NULL,
   `saida` time DEFAULT NULL,
-  `estado` enum('pendente','aprovada','rejeitada') NOT NULL,
+  `estado` enum('Pendente','Aprovada','Rejeitada') NOT NULL,
   `disciplina` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
